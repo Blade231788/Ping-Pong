@@ -32,9 +32,17 @@ window.fill(back)
 clock = time.Clock()
 FPS = 60
 
-platform_1 = Player('png-transparent-black-m-unity-2d-black-unity-2d-black-m.png', 30, 200, 4, 50, 150)
-platform_2 = Player('png-transparent-black-m-unity-2d-black-unity-2d-black-m.png', 520, 200, 4, 50, 150)
-ball = GameSprite('png-transparent-a-football-football-one-in-kind.png', 200, 200, 4, 50, 50)
+platform_1 = Player('Untitled.png', 30, 200, 4, 15, 140)
+platform_2 = Player('Untitled.png', 520, 200, 4, 15, 140)
+ball = GameSprite('vecteezy_soccer-ball-png-with-ai-generated_26772408.png', 280, 200, 4, 50, 50)
+
+font.init()
+font = font.Font(None, 35)
+win_1 = font.render('ИГРОК 1 ВЫИГРАЛ', True, (0, 250, 0))
+win_2 = font.render('ИГРОК 2 ВЫИГРАЛ', True, (0, 250, 0))
+
+speed_x = 3
+speed_y = 3
 
 finish = False
 game = True
@@ -46,10 +54,31 @@ while game:
 
     if finish != True:
         window.fill(back)
+
         platform_1.update_l()
         platform_2.update_r()
+
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+        if sprite.collide_rect(platform_1, ball) or sprite.collide_rect(platform_2, ball):
+            speed_x *= -1
+            speed_y *= 1
+        
+        if ball.rect.y > 450 or ball.rect.y < 0:
+            speed_y *= -1
+
+        if ball.rect.x < 0:
+            finish = True
+            window.blit(win_2, (200, 200))
+        
+        if ball.rect.x > 600:
+            finish = True
+            window.blit(win_1, (200, 200))
+
         platform_1.reset()
         platform_2.reset()
         ball.reset()
+
     display.update()
     clock.tick(FPS)
